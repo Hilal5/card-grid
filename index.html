@@ -1,204 +1,306 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Grid 12 Card – 3 Kolom Saat Kecil</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  :root{
-    --page-pad: clamp(12px, 3vw, 32px);
-    --gap: clamp(10px, 2vw, 20px);
-    --card-bg: #111827;        /* slate-900 */
-    --card-bd: #1f2937;        /* slate-800 */
-    --text: #e5e7eb;           /* slate-200 */
-    --muted: #9ca3af;          /* slate-400 */
-    --radius: 16px;
-  }
-
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
-    background:#0b0f18;
-    color:var(--text);
-  }
-
-  /* Page container with padding */
-  .page{
-    padding: var(--page-pad);
-    min-height: 100%;
-  }
-
-  /* UPDATE: 6 kolom di desktop, 3 kolom saat diperkecil */
-.wrap{
-  max-width: 1400px; /* biar 6 kolom nafasnya lega di desktop */
-  margin-inline: auto;
-}
-
-.grid{
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat(6, minmax(0, 1fr)); /* <-- 6 kolom */
-  align-items: start;
-}
-
-@media (max-width: 1200px){
-  .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); } /* tetap 3 */
-}
-@media (max-width: 700px){
-  .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } /* tetap 3 */
-}
-
-  /* CARD */
-  .card{
-    min-width: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)) , var(--card-bg);
-    border: 1px solid var(--card-bd);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.03);
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-  }
-  .card:hover{
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(0,0,0,.35);
-    border-color: rgba(255,255,255,.18);
-  }
-
-  /* Media (opsional) pakai rasio agar rapi */
-  .card-media{
-    aspect-ratio: 16 / 9;
-    background: radial-gradient(120% 120% at 70% 20%, rgba(124,92,255,.25), transparent 40%),
-                radial-gradient(120% 120% at 20% 80%, rgba(0,209,255,.22), transparent 40%),
-                #0e1525;
-  }
-
-  .card-body{
-    padding: clamp(12px, 2.2vw, 16px);
-  }
-  .card-title{
-    font-weight: 700;
-    font-size: clamp(12px, 1.2vw, 16px);
-    line-height: 1.2;
-    margin: 0 0 6px;
-    word-wrap: break-word;
-    overflow-wrap: anywhere; /* pastikan teks tetap di dalam card */
-  }
-  .card-desc{
-    color: var(--muted);
-    font-size: clamp(11px, 1vw, 14px);
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  /* Biar semua card menyusut proporsional saat grid tetap 3 kolom di layar kecil */
-  .card{ min-width: 0; } /* penting agar konten bisa mengecil tanpa overflow */
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grid 12 Card – Lazy Image + Blur-Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen bg-slate-950 text-slate-100">
-  <!-- Page padding -->
-  <div class="mx-auto max-w-[1400px] p-4 sm:p-6 lg:p-8 ">
-    <!-- Grid: base=3 kolom, lg=6 kolom -->
-    <div class="grid grid-cols-6 max-[1200px]:grid-cols-4 max-[700px]:grid-cols-2 gap-4">
-      <!-- Card (ulang 12x) -->
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+  <main class="mx-auto max-w-[1400px] p-4 sm:p-6">
+    <!-- Auto-fit: kolom menyesuaikan; min 220px per card (≈maks 6 kolom di 1400px) -->
+    <section class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
+      
+      <!-- Ulangi 12x, ganti seed agar gambarnya beda -->
+      <!-- Card 1 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/1/800/450"
+            srcset="
+              https://picsum.photos/seed/1/400/225 400w,
+              https://picsum.photos/seed/1/800/450 800w,
+              https://picsum.photos/seed/1/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 1"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 1 – Judul</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Deskripsi singkat card satu supaya tetap rapi.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 1</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Lazy-load + blur-up, bebas CLS.</p>
         </div>
       </article>
 
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+      <!-- Card 2 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/2/800/450"
+            srcset="
+              https://picsum.photos/seed/2/400/225 400w,
+              https://picsum.photos/seed/2/800/450 800w,
+              https://picsum.photos/seed/2/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 2"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 2</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Teks tetap di dalam card.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 2</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Teks aman di dalam card.</p>
         </div>
       </article>
 
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+      <!-- Card 3 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/3/800/450"
+            srcset="
+              https://picsum.photos/seed/3/400/225 400w,
+              https://picsum.photos/seed/3/800/450 800w,
+              https://picsum.photos/seed/3/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 3"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 3</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Grid tetap 3 kolom saat kecil.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 3</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Auto-fit, tanpa set breakpoint.</p>
         </div>
       </article>
 
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+      <!-- Card 4 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/4/800/450"
+            srcset="
+              https://picsum.photos/seed/4/400/225 400w,
+              https://picsum.photos/seed/4/800/450 800w,
+              https://picsum.photos/seed/4/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 4"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 4</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Kontainer ikut mengecil.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 4</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Width/height cegah CLS.</p>
         </div>
       </article>
 
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+      <!-- Card 5 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/5/800/450"
+            srcset="
+              https://picsum.photos/seed/5/400/225 400w,
+              https://picsum.photos/seed/5/800/450 800w,
+              https://picsum.photos/seed/5/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 5"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 5</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Coba resize di inspect.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 5</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Responsive dengan srcset.</p>
         </div>
       </article>
 
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+      <!-- Card 6 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/6/800/450"
+            srcset="
+              https://picsum.photos/seed/6/400/225 400w,
+              https://picsum.photos/seed/6/800/450 800w,
+              https://picsum.photos/seed/6/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 6"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 6</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Hover: naik dikit + shadow.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 6</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Gambar tajam setelah load.</p>
         </div>
       </article>
 
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+      <!-- Card 7 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/7/800/450"
+            srcset="
+              https://picsum.photos/seed/7/400/225 400w,
+              https://picsum.photos/seed/7/800/450 800w,
+              https://picsum.photos/seed/7/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 7"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 7</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Min-w-0 cegah overflow.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 7</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Tanpa JS eksternal.</p>
         </div>
       </article>
 
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+      <!-- Card 8 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/8/800/450"
+            srcset="
+              https://picsum.photos/seed/8/400/225 400w,
+              https://picsum.photos/seed/8/800/450 800w,
+              https://picsum.photos/seed/8/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 8"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 8</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Teks wrap otomatis.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 8</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Performant & clean.</p>
         </div>
       </article>
 
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+      <!-- Card 9 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/9/800/450"
+            srcset="
+              https://picsum.photos/seed/9/400/225 400w,
+              https://picsum.photos/seed/9/800/450 800w,
+              https://picsum.photos/seed/9/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 9"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 9</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Rapi & ringan.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 9</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Auto-fit skala mulus.</p>
         </div>
       </article>
 
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+      <!-- Card 10 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/10/800/450"
+            srcset="
+              https://picsum.photos/seed/10/400/225 400w,
+              https://picsum.photos/seed/10/800/450 800w,
+              https://picsum.photos/seed/10/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 10"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 10</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Bisa ganti media.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 10</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Arsitektur simpel.</p>
         </div>
       </article>
 
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+      <!-- Card 11 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/11/800/450"
+            srcset="
+              https://picsum.photos/seed/11/400/225 400w,
+              https://picsum.photos/seed/11/800/450 800w,
+              https://picsum.photos/seed/11/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 11"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 11</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Shadow halus.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 11</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Mudah diintegrasi API.</p>
         </div>
       </article>
 
-      <article class="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-slate-700">
-        <div class="aspect-video bg-[radial-gradient(120%_120%_at_70%_20%,rgba(124,92,255,.25),transparent_40%),radial-gradient(120%_120%_at_20%_80%,rgba(0,209,255,.22),transparent_40%),#0e1525]"></div>
+      <!-- Card 12 -->
+      <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 ring-1 ring-white/5 shadow-md">
+        <div class="aspect-video overflow-hidden bg-slate-800/40">
+          <img
+            src="https://picsum.photos/seed/12/800/450"
+            srcset="
+              https://picsum.photos/seed/12/400/225 400w,
+              https://picsum.photos/seed/12/800/450 800w,
+              https://picsum.photos/seed/12/1200/675 1200w
+            "
+            sizes="(min-width:1400px) 16vw, (min-width:1000px) 22vw, (min-width:700px) 30vw, 45vw"
+            alt="Preview karya 12"
+            width="800" height="450"
+            loading="lazy" decoding="async" fetchpriority="low"
+            class="h-full w-full object-cover blur-sm scale-105 transition-[filter,transform] duration-500"
+            onload="this.classList.remove('blur-sm','scale-105')"
+          />
+        </div>
         <div class="p-3 md:p-4">
-          <h3 class="text-xs md:text-sm font-semibold leading-tight break-words">Card 12</h3>
-          <p class="mt-1 text-[11px] md:text-xs text-slate-400 leading-relaxed break-words">Font kecil biar muat.</p>
+          <h3 class="text-sm font-semibold leading-tight break-words">Card 12</h3>
+          <p class="mt-1 text-xs text-slate-400 leading-relaxed break-words">Siap production tweaks.</p>
         </div>
       </article>
-    </div>
-  </div>
+
+    </section>
+  </main>
 </body>
 </html>
